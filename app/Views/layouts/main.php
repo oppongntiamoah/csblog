@@ -3,7 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $title ?? 'CS Knowledge Base' ?></title>
+    <title><?= esc($seo_title ?? $title ?? 'CS Knowledge Base') ?></title>
+    <?php if(!empty($seo_description)): ?>
+    <meta name="description" content="<?= esc($seo_description) ?>">
+    <?php endif; ?>
+    <?php if(!empty($seo_keywords)): ?>
+    <meta name="keywords" content="<?= esc($seo_keywords) ?>">
+    <?php endif; ?>
+    <!-- Open Graph -->
+    <meta property="og:title" content="<?= esc($seo_title ?? $title ?? 'CS Knowledge Base') ?>">
+    <?php if(!empty($seo_description)): ?>
+    <meta property="og:description" content="<?= esc($seo_description) ?>">
+    <?php endif; ?>
+    <meta property="og:type" content="article">
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">

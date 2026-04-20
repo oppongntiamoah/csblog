@@ -56,7 +56,7 @@ class Blog extends BaseController
      */
     public function post(string $slug): string
     {
-        $post = $this->postModel->where('slug', $slug)->first();
+        $post = $this->postModel->getPostWithCategory($slug);
 
         if (!$post) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
@@ -84,11 +84,14 @@ class Blog extends BaseController
             ->first();
 
         $data = [
-            'title'     => $post['code'] . ' ' . $post['title'] . ' — CS KB',
-            'post'      => $post,
-            'related'   => $related,
-            'prev_post' => $prev,
-            'next_post' => $next,
+            'title'           => $post['code'] . ' ' . $post['title'] . ' — CS KB',
+            'seo_title'       => $post['seo_title'] ?: $post['code'] . ' ' . $post['title'] . ' — CS KB',
+            'seo_description' => $post['seo_description'] ?? null,
+            'seo_keywords'    => $post['seo_keywords'] ?? null,
+            'post'            => $post,
+            'related'         => $related,
+            'prev_post'       => $prev,
+            'next_post'       => $next,
         ];
 
         return view('blog/post', $data);

@@ -12,6 +12,7 @@ class PostModel extends Model
     protected $allowedFields = [
         'category_id', 'code', 'title', 'slug',
         'content', 'hl', 'sort_order',
+        'seo_title', 'seo_description', 'seo_keywords',
     ];
 
     protected $useTimestamps = true;
@@ -28,5 +29,18 @@ class PostModel extends Model
             ->orderBy('p.sort_order', 'ASC')
             ->get()
             ->getResultArray();
+    }
+
+    /**
+     * Return a single post with its category name and slug.
+     */
+    public function getPostWithCategory(string $slug): ?array
+    {
+        return $this->db->table('posts p')
+            ->select('p.*, c.name as category, c.slug as category_slug')
+            ->join('categories c', 'c.id = p.category_id')
+            ->where('p.slug', $slug)
+            ->get()
+            ->getRowArray();
     }
 }

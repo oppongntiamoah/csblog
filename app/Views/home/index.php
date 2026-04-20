@@ -159,26 +159,26 @@
 
                 <!-- Learning Objectives List -->
                 <div class="objectives-list">
-                    <?php 
+                    <?php
                     $objectives = $objectives ?? [
-                        ['code'=>'A1.1.1','text'=>'Describe the functions and interactions of the main CPU components.','hl'=>false],
-                        ['code'=>'A1.1.2','text'=>'Describe the role of a GPU.','hl'=>false],
-                        ['code'=>'A1.1.3','text'=>'Explain the differences between the CPU and the GPU.','hl'=>true],
-                        ['code'=>'A1.1.4','text'=>'Explain the purposes of different types of primary memory.','hl'=>false],
-                        ['code'=>'A1.1.5','text'=>'Describe the fetch, decode and execute cycle.','hl'=>false],
-                        ['code'=>'A1.1.6','text'=>'Describe the process of pipelining in multi-core architectures.','hl'=>true],
-                        ['code'=>'A1.1.7','text'=>'Describe internal and external types of secondary memory storage.','hl'=>false],
-                        ['code'=>'A1.1.8','text'=>'Describe the concept of compression.','hl'=>false],
-                        ['code'=>'A1.1.9','text'=>'Describe the different types of services in cloud computing.','hl'=>false],
-                        ['code'=>'A1.2.1','text'=>'Describe the principal methods of representing data.','hl'=>false],
-                        ['code'=>'A1.2.2','text'=>'Explain how binary is used to store data.','hl'=>false],
-                        ['code'=>'A1.2.3','text'=>'Describe the purpose and use of logic gates.','hl'=>false],
+                        ['code'=>'A1.1.1','title'=>'Describe the functions and interactions of the main CPU components.','hl'=>false,'slug'=>'a1-1-1-describe-the-functions-and-interactions-of-the-main-cpu-components'],
+                        ['code'=>'A1.1.2','title'=>'Describe the role of a GPU.','hl'=>false,'slug'=>'a1-1-2-describe-the-role-of-a-gpu'],
+                        ['code'=>'A1.1.3','title'=>'Explain the differences between the CPU and the GPU.','hl'=>true,'slug'=>'a1-1-3-explain-the-differences-between-the-cpu-and-the-gpu'],
+                        ['code'=>'A1.1.4','title'=>'Explain the purposes of different types of primary memory.','hl'=>false,'slug'=>'a1-1-4-explain-the-purposes-of-different-types-of-primary-memory'],
+                        ['code'=>'A1.1.5','title'=>'Describe the fetch, decode and execute cycle.','hl'=>false,'slug'=>'a1-1-5-describe-the-fetch-decode-and-execute-cycle'],
+                        ['code'=>'A1.1.6','title'=>'Describe the process of pipelining in multi-core architectures.','hl'=>true,'slug'=>'a1-1-6-describe-the-process-of-pipelining-in-multi-core-architectures'],
+                        ['code'=>'A1.1.7','title'=>'Describe internal and external types of secondary memory storage.','hl'=>false,'slug'=>'a1-1-7-describe-internal-and-external-types-of-secondary-memory-storage'],
+                        ['code'=>'A1.1.8','title'=>'Describe the concept of compression.','hl'=>false,'slug'=>'a1-1-8-describe-the-concept-of-compression'],
+                        ['code'=>'A1.1.9','title'=>'Describe the different types of services in cloud computing.','hl'=>false,'slug'=>'a1-1-9-describe-the-different-types-of-services-in-cloud-computing'],
+                        ['code'=>'A1.2.1','title'=>'Describe the principal methods of representing data.','hl'=>false,'slug'=>'a1-2-1-describe-the-principal-methods-of-representing-data'],
+                        ['code'=>'A1.2.2','title'=>'Explain how binary is used to store data.','hl'=>false,'slug'=>'a1-2-2-explain-how-binary-is-used-to-store-data'],
+                        ['code'=>'A1.2.3','title'=>'Describe the purpose and use of logic gates.','hl'=>false,'slug'=>'a1-2-3-describe-the-purpose-and-use-of-logic-gates'],
                     ];
                     foreach($objectives as $obj): ?>
-                    <a href="<?= base_url('blog/post/'.url_title($obj['code'].'-'.$obj['text'], '-', true)) ?>" 
+                    <a href="<?= base_url('blog/post/'.$obj['slug']) ?>"
                        class="objective-row <?= $obj['hl'] ? 'hl-row' : '' ?>">
                         <span class="obj-code"><?= esc($obj['code']) ?></span>
-                        <span class="obj-text"><?= esc($obj['text']) ?></span>
+                        <span class="obj-text"><?= esc($obj['title']) ?></span>
                         <?php if($obj['hl']): ?>
                         <span class="badge bg-warning text-dark ms-2 small fw-semibold">HL</span>
                         <?php endif; ?>
