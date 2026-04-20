@@ -23,7 +23,7 @@ class Blog extends BaseController
     {
         $data = [
             'title'      => 'All Topics — CS Knowledge Base',
-            'categories' => $this->categoryModel->findAll(),
+            'categories' => $this->categoryModel->orderBy('theme', 'ASC')->orderBy('sort_order', 'ASC')->findAll(),
             'posts'      => $this->postModel->orderBy('category_id', 'ASC')->orderBy('sort_order', 'ASC')->findAll(),
         ];
 
@@ -42,10 +42,11 @@ class Blog extends BaseController
         }
 
         $data = [
-            'title'                => $category['name'] . ' — CS Knowledge Base',
-            'active_category'      => $category['name'],
-            'category_description' => $category['description'],
-            'objectives'           => $this->postModel->getObjectivesByCategory($slug),
+            'title'          => $category['name'] . ' — CS Knowledge Base',
+            'sidebar_active' => $slug,
+            'category'       => $category,
+            'cat_code'       => $this->categoryModel->computeCode($category),
+            'objectives'     => $this->postModel->getObjectivesByCategory($slug),
         ];
 
         return view('home/index', $data);
@@ -62,15 +63,7 @@ class Blog extends BaseController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
-        // Related posts in same category
-        $related = $this->postModel
-            ->where('category_id', $post['category_id'])
-            ->where('id !=', $post['id'])
-            ->orderBy('sort_order', 'ASC')
-            ->limit(10)
-            ->findAll();
-
-        // Prev / Next within same category
+        // Related: prev / next within same category
         $prev = $this->postModel
             ->where('category_id', $post['category_id'])
             ->where('sort_order <', $post['sort_order'])
@@ -88,8 +81,8 @@ class Blog extends BaseController
             'seo_title'       => $post['seo_title'] ?: $post['code'] . ' ' . $post['title'] . ' — CS KB',
             'seo_description' => $post['seo_description'] ?? null,
             'seo_keywords'    => $post['seo_keywords'] ?? null,
+            'sidebar_active'  => $post['category_slug'],
             'post'            => $post,
-            'related'         => $related,
             'prev_post'       => $prev,
             'next_post'       => $next,
         ];

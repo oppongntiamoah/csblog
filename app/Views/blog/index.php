@@ -2,44 +2,49 @@
 
 <?= $this->section('content') ?>
 
-<div class="container py-5">
-    <div class="mb-5">
-        <h1 class="fw-bold">All Topics</h1>
-        <p class="text-muted">Browse all IB Computer Science learning objectives, organised by theme and category.</p>
-    </div>
+<!-- Breadcrumb -->
+<nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="<?= base_url('/') ?>">Home</a>
+    <span class="sep">/</span>
+    <span>All Topics</span>
+</nav>
 
-    <?php foreach($categories as $cat): ?>
-    <?php
-        $catPosts = array_filter($posts, fn($p) => $p['category_id'] === $cat['id']);
-        if(empty($catPosts)) continue;
-    ?>
-    <div class="mb-5">
-        <div class="d-flex align-items-center gap-2 mb-3">
-            <?php if($cat['icon']): ?>
-            <i class="bi bi-<?= esc($cat['icon']) ?> fs-5 text-primary"></i>
-            <?php endif; ?>
-            <h2 class="h4 fw-bold mb-0"><?= esc($cat['name']) ?></h2>
-            <span class="badge bg-secondary ms-1"><?= count($catPosts) ?></span>
-            <a href="<?= base_url('blog/category/'.$cat['slug']) ?>" class="ms-auto btn btn-outline-primary btn-sm">View all</a>
-        </div>
-        <?php if($cat['description']): ?>
-        <p class="text-muted small mb-3"><?= esc($cat['description']) ?></p>
-        <?php endif; ?>
-        <div class="objectives-list">
-            <?php foreach($catPosts as $post): ?>
-            <a href="<?= base_url('blog/post/'.$post['slug']) ?>"
-               class="objective-row <?= $post['hl'] ? 'hl-row' : '' ?>">
-                <span class="obj-code"><?= esc($post['code']) ?></span>
-                <span class="obj-text"><?= esc($post['title']) ?></span>
-                <?php if($post['hl']): ?>
-                <span class="badge bg-warning text-dark ms-2 small fw-semibold">HL</span>
-                <?php endif; ?>
-                <i class="bi bi-chevron-right ms-auto text-muted obj-arrow"></i>
-            </a>
-            <?php endforeach; ?>
-        </div>
-    </div>
-    <?php endforeach; ?>
+<h1 class="page-title">All Topics</h1>
+
+<div class="box-info">
+    All IB Computer Science 2027 learning objectives, organised by theme and category.
 </div>
+
+<?php
+// Group posts by category
+$postsByCategory = [];
+foreach ($posts as $p) {
+    $postsByCategory[$p['category_id']][] = $p;
+}
+?>
+
+<?php foreach ($categories as $cat): ?>
+<?php if (empty($postsByCategory[$cat['id']])) continue; ?>
+<h2 style="font-size:1.1rem; font-weight:700; margin: 1.75rem 0 .4rem; color:#111;">
+    <a href="<?= base_url('blog/category/' . $cat['slug']) ?>" style="color:inherit; text-decoration:none;">
+        <?= esc($cat['name']) ?>
+    </a>
+</h2>
+<?php if ($cat['description']): ?>
+<p style="font-size:.85rem; color:var(--muted); margin-bottom:.5rem;"><?= esc($cat['description']) ?></p>
+<?php endif; ?>
+<ul class="topics-list">
+    <?php foreach ($postsByCategory[$cat['id']] as $post): ?>
+    <li>
+        <a href="<?= base_url('blog/post/' . $post['slug']) ?>">
+            <?= esc($post['code']) ?>: <?= esc($post['title']) ?>
+        </a>
+        <?php if ($post['hl']): ?>
+        <span class="hl-tag">HL</span>
+        <?php endif; ?>
+    </li>
+    <?php endforeach; ?>
+</ul>
+<?php endforeach; ?>
 
 <?= $this->endSection() ?>

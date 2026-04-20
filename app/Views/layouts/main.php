@@ -4,36 +4,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= esc($seo_title ?? $title ?? 'CS Knowledge Base') ?></title>
-    <?php if(!empty($seo_description)): ?>
+    <?php if (!empty($seo_description)): ?>
     <meta name="description" content="<?= esc($seo_description) ?>">
     <?php endif; ?>
-    <?php if(!empty($seo_keywords)): ?>
+    <?php if (!empty($seo_keywords)): ?>
     <meta name="keywords" content="<?= esc($seo_keywords) ?>">
     <?php endif; ?>
-    <!-- Open Graph -->
     <meta property="og:title" content="<?= esc($seo_title ?? $title ?? 'CS Knowledge Base') ?>">
-    <?php if(!empty($seo_description)): ?>
+    <?php if (!empty($seo_description)): ?>
     <meta property="og:description" content="<?= esc($seo_description) ?>">
     <?php endif; ?>
-    <meta property="og:type" content="article">
-
-    <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta property="og:type" content="website">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="<?= base_url('css/style.css') ?>">
 </head>
 <body>
 
-<?= $this->include('partials/navbar') ?>
+<!-- ── Top bar ── -->
+<header class="topbar">
+    <button class="topbar-hamburger" id="sidebarToggle" aria-label="Open menu">
+        <i class="bi bi-list"></i>
+    </button>
+    <a class="topbar-brand" href="<?= base_url('/') ?>">ComputerScienceKB</a>
+    <div class="topbar-search">
+        <span class="topbar-search-icon"><i class="bi bi-search"></i></span>
+        <input type="search" placeholder="Search topics…" aria-label="Search">
+    </div>
+    <nav class="topbar-nav">
+        <a href="<?= base_url('blog') ?>">All Topics</a>
+        <a href="<?= base_url('about') ?>">About</a>
+    </nav>
+</header>
 
-<?= $this->renderSection('content') ?>
+<!-- ── Shell (sidebar + content) ── -->
+<div class="shell">
 
-<?= $this->include('partials/footer') ?>
+    <!-- Mobile overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Sidebar -->
+    <?= $this->include('partials/sidebar') ?>
+
+    <!-- Main area -->
+    <div class="main-area">
+        <main class="content">
+            <?= $this->renderSection('content') ?>
+        </main>
+        <footer class="site-footer">
+            <span>&copy; <?= date('Y') ?> ComputerScienceKB — IB Computer Science 2027 resources</span>
+            <span>Built with <a href="https://codeigniter.com">CodeIgniter 4</a></span>
+        </footer>
+    </div>
+
+</div>
+
+<script>
+(function () {
+    var btn = document.getElementById('sidebarToggle');
+    var sb  = document.getElementById('mainSidebar');
+    var ov  = document.getElementById('sidebarOverlay');
+    if (!btn || !sb) return;
+    btn.addEventListener('click', function () {
+        sb.classList.toggle('open');
+        ov.classList.toggle('visible');
+    });
+    ov.addEventListener('click', function () {
+        sb.classList.remove('open');
+        ov.classList.remove('visible');
+    });
+
+    // Sidebar sub-section toggle
+    document.querySelectorAll('[data-toggle-sub]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var target = document.getElementById(btn.dataset.toggleSub);
+            var chev   = btn.querySelector('.sb-chevron');
+            if (target) {
+                target.classList.toggle('collapsed');
+                if (chev) chev.classList.toggle('up');
+            }
+        });
+    });
+})();
+</script>
 </body>
 </html>

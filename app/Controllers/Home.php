@@ -18,11 +18,15 @@ class Home extends BaseController
 
     public function index(): string
     {
+        $slug     = 'computer-fundamentals';
+        $category = $this->categoryModel->where('slug', $slug)->first();
+
         $data = [
-            'title'                => 'CS Knowledge Base — IB Computer Science',
-            'active_category'      => 'Computer Fundamentals',
-            'category_description' => 'This category provides a foundation in the essential components and operation of computer systems. Topics include hardware architecture, the function of the CPU, GPU, machine instruction cycles, and memory types. Students will also examine system software, including operating systems. This knowledge underpins all higher-level computing concepts and supports critical analysis of how computers process and manage data.',
-            'objectives'           => $this->postModel->getObjectivesByCategory('computer-fundamentals'),
+            'title'          => 'CS Knowledge Base — IB Computer Science 2027',
+            'sidebar_active' => $slug,
+            'category'       => $category,
+            'cat_code'       => $category ? $this->categoryModel->computeCode($category) : '',
+            'objectives'     => $this->postModel->getObjectivesByCategory($slug),
         ];
 
         return view('home/index', $data);
@@ -30,6 +34,8 @@ class Home extends BaseController
 
     public function about(): string
     {
-        return view('home/about', ['title' => 'About — CS Knowledge Base']);
+        return view('home/about', [
+            'title' => 'About — CS Knowledge Base',
+        ]);
     }
 }
