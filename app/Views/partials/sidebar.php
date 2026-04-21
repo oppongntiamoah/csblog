@@ -59,4 +59,23 @@ foreach ($_allCats as $_c) {
     <a class="sb-link <?= service('uri')->getPath() === 'about' ? 'active' : '' ?>"
        href="<?= base_url('about') ?>">About</a>
 
+    <div class="sb-divider"></div>
+
+    <!-- Forum section -->
+    <a class="sb-section-link <?= str_starts_with(service('uri')->getPath(), 'forum') ? '' : '' ?>"
+       href="<?= base_url('forum') ?>">Forum</a>
+
+    <?php
+    $_forumCatModel = new \App\Models\ForumCategoryModel();
+    $_forumCats     = $_forumCatModel->orderBy('sort_order', 'ASC')->findAll();
+    $_forumPath     = service('uri')->getPath();
+    foreach ($_forumCats as $_fc):
+        $_fcActive = $_forumPath === 'forum/' . $_fc['slug'];
+    ?>
+    <a class="sb-link sb-indent <?= $_fcActive ? 'active' : '' ?>"
+       href="<?= base_url('forum/' . $_fc['slug']) ?>">
+        <?= esc($_fc['name']) ?>
+    </a>
+    <?php endforeach; ?>
+
 </nav>

@@ -33,9 +33,20 @@
         <input type="search" placeholder="Search topics…" aria-label="Search">
     </div>
     <nav class="topbar-nav">
+        <a href="<?= base_url('forum') ?>">Forum</a>
         <a href="<?= base_url('blog') ?>">All Topics</a>
         <a href="<?= base_url('about') ?>">About</a>
     </nav>
+    <!-- User login state -->
+    <?php if (session()->get('user_logged_in')): ?>
+    <div class="topbar-user">
+        <?php if (session()->get('user_avatar')): ?>
+        <img src="<?= esc(session()->get('user_avatar')) ?>" alt="<?= esc(session()->get('user_name')) ?>">
+        <?php endif; ?>
+        <span><?= esc(session()->get('user_name')) ?></span>
+        <a href="<?= base_url('auth/logout') ?>" style="color:var(--muted);">Sign out</a>
+    </div>
+    <?php endif; ?>
 </header>
 
 <!-- ── Shell (sidebar + content) ── -->

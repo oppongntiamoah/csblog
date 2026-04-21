@@ -14,6 +14,24 @@ $routes->get('/blog', 'Blog::index');
 $routes->get('/blog/category/(:segment)', 'Blog::category/$1');
 $routes->get('/blog/post/(:segment)', 'Blog::post/$1');
 
+// ── Google OAuth ────────────────────────────────────────────────────────────
+$routes->get('auth/google',           'Auth::google');
+$routes->get('auth/google/callback',  'Auth::googleCallback');
+$routes->get('auth/logout',           'Auth::logout');
+
+// ── Forum (public reads) ─────────────────────────────────────────────────────
+$routes->get('forum',                    'Forum::index');
+$routes->get('forum/t/(:num)',           'Forum::thread/$1');       // before catch-all
+$routes->get('forum/(:segment)',         'Forum::category/$1');
+
+// ── Forum (requires Google login) ────────────────────────────────────────────
+$routes->group('forum', ['filter' => 'forumAuth'], function ($routes) {
+    $routes->get('(:segment)/new',         'Forum::newThread/$1');
+    $routes->post('(:segment)/new',        'Forum::storeThread/$1');
+    $routes->post('t/(:num)/reply',        'Forum::reply/$1');
+    $routes->post('post/(:num)/delete',    'Forum::deletePost/$1');
+});
+
 // Admin auth (no filter)
 $routes->get('admin/login', 'Admin\Auth::login');
 $routes->post('admin/login', 'Admin\Auth::authenticate');
